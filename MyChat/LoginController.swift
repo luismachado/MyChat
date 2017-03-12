@@ -40,7 +40,7 @@ class LoginController: UIViewController {
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
             handleLogin()
         } else {
-            handleLogin()
+            handleRegister()
         }
         
     }
