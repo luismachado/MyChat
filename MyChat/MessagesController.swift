@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 
 class MessagesController: UITableViewController {
+    
+    var messages = [Message]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,10 +23,45 @@ class MessagesController: UITableViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         
         checkIfUserIsLoggedIn()
+        
+        observeMessages()
+    }
+    
+    
+    
+    func observeMessages() {
+        let ref = FIRDatabase.database().reference().child("messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let message = Message()
+                message.setValuesForKeys(dictionary)
+                self.messages.append(message)
+                
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+            }
+            
+        })
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+        let message = messages[indexPath.row]
+        
+        cell.textLabel?.text = message.toId
+        cell.detailTextLabel?.text = message.text
+        return cell
     }
     
     func handleNewMessage() {
         let newMessageController = NewMessageController()
+        newMessageController.messagesController = self
         let navController = UINavigationController(rootViewController: newMessageController)
         present(navController, animated: true, completion: nil)
     }
@@ -48,21 +85,9 @@ class MessagesController: UITableViewController {
         })
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
-    }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        showChatController()
-    }
-    
-    func showChatController() {
-        
+    func showChatControllerForUser(user: User) {
         let chatLogController = ChatLogController(collectionViewLayout: UICollectionViewFlowLayout())
+        chatLogController.user = user
         navigationController?.pushViewController(chatLogController, animated: true)
     }
     
