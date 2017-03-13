@@ -18,6 +18,7 @@
 		80F6C71F1E76D65400B2E2D8 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C71E1E76D65400B2E2D8 /* User.swift */; };
 		80F6C7211E76EB6500B2E2D8 /* LoginController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7201E76EB6500B2E2D8 /* LoginController+handlers.swift */; };
 		80F6C7241E77001500B2E2D8 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7231E77001500B2E2D8 /* Extensions.swift */; };
+		80F6C7261E770A5600B2E2D8 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		80F6C71E1E76D65400B2E2D8 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = MyChat/User.swift; sourceTree = "<group>"; };
 		80F6C7201E76EB6500B2E2D8 /* LoginController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "LoginController+handlers.swift"; path = "MyChat/LoginController+handlers.swift"; sourceTree = "<group>"; };
 		80F6C7231E77001500B2E2D8 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Extensions.swift; path = MyChat/Extensions.swift; sourceTree = "<group>"; };
+		80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatLogController.swift; path = MyChat/ChatLogController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				80F6C7021E7338C000B2E2D8 /* MessagesController.swift */,
 				80F6C7191E75CBF300B2E2D8 /* NewMessageController.swift */,
 				80F6C7201E76EB6500B2E2D8 /* LoginController+handlers.swift */,
+				80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				80F6C7261E770A5600B2E2D8 /* ChatLogController.swift in Sources */,
 				80F6C71A1E75CBF300B2E2D8 /* NewMessageController.swift in Sources */,
 				80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */,
 				80F6C7211E76EB6500B2E2D8 /* LoginController+handlers.swift in Sources */,

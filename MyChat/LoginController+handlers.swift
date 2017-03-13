@@ -26,7 +26,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             
             if let error = error {
-                print(error)
+                print(error) //TODO IF EMPTY DONT SEND
                 return
             }
             

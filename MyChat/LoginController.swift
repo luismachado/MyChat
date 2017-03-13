@@ -38,7 +38,7 @@ class LoginController: UIViewController {
     }()
     
     func handleLoginRegister() {
-        
+        //TODO SPINNER AND BLOCK SCREEN
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
             handleLogin()
         } else {
@@ -61,7 +61,7 @@ class LoginController: UIViewController {
         
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if let error = error {
-                print(error)
+                print(error) //TODO IF EMPTY DONT SEND
                 return
             }
             
