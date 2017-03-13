@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 
 class LoginController: UIViewController {
+    
+    var messagesController: MessagesController?
 
     let inputsContainerView: UIView = {
         let view = UIView()
@@ -64,6 +66,8 @@ class LoginController: UIViewController {
             }
             
             print("User successfully logged into Firebase db")
+            self.messagesController?.navigationItem.title = ""
+            self.messagesController?.fetchUserAndSetupNavBarTitle()
             self.dismiss(animated: true, completion: nil)
         })
         
