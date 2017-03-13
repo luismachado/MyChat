@@ -69,42 +69,7 @@ class LoginController: UIViewController {
         
     }
     
-    func handleRegister() {
-        
-        guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
-            print("Form is not valid")
-            return
-        }
-        
-        if email == "" || password == "" || name == "" {
-            print("Form is not valid")
-            return
-        }
-        
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
-            
-            if let error = error {
-                print(error)
-                return
-            }
-            
-            guard let uid = user?.uid else {return}
-            
-            let ref = FIRDatabase.database().reference().child("users").child(uid)
-            let values = ["name": name, "email" : email]
-            ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                
-                if let err = err {
-                    print(err)
-                    return
-                }
-                
-                print("Saved user successfully into Firebase db")
-                self.dismiss(animated: true, completion: nil)
-                
-            })
-        })
-    }
+    
     
     let nameTextField: UITextField = {
         let tf = UITextField()
@@ -144,14 +109,16 @@ class LoginController: UIViewController {
         return tf
     }()
     
-    let profileImageView: UIImageView = {
+    lazy var profileImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "chat_icon")
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
-    
+        
     lazy var loginRegisterSegmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Login", "Register"])
         sc.tintColor = .white
