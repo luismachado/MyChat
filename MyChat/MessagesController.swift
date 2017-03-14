@@ -121,12 +121,16 @@ class MessagesController: UITableViewController {
         }
     }
     
-    func fetchUserAndSetupNavBarTitle() {
-        guard let uid = FIRAuth.auth()?.currentUser?.uid else {return}
-        
+    func cleanUpTable() {
         messages.removeAll()
         messagesDictionary.removeAll()
         tableView.reloadData()
+    }
+    
+    func fetchUserAndSetupNavBarTitle() {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else {return}
+        
+        cleanUpTable()
         
         observeUserMessages()
         
