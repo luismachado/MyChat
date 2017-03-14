@@ -21,6 +21,7 @@
 		80F6C7261E770A5600B2E2D8 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */; };
 		80F6C7281E772AA000B2E2D8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7271E772AA000B2E2D8 /* Message.swift */; };
 		80F6C72B1E78349A00B2E2D8 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C72A1E78349A00B2E2D8 /* UserCell.swift */; };
+		80F6C72D1E784B3000B2E2D8 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatLogController.swift; path = MyChat/ChatLogController.swift; sourceTree = "<group>"; };
 		80F6C7271E772AA000B2E2D8 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = MyChat/Message.swift; sourceTree = "<group>"; };
 		80F6C72A1E78349A00B2E2D8 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserCell.swift; path = MyChat/UserCell.swift; sourceTree = "<group>"; };
+		80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatMessageCell.swift; path = MyChat/ChatMessageCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				80F6C72A1E78349A00B2E2D8 /* UserCell.swift */,
+				80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				80F6C7211E76EB6500B2E2D8 /* LoginController+handlers.swift in Sources */,
 				80F6C7181E75740500B2E2D8 /* LoginController.swift in Sources */,
 				80F6C71F1E76D65400B2E2D8 /* User.swift in Sources */,
+				80F6C72D1E784B3000B2E2D8 /* ChatMessageCell.swift in Sources */,
 				80F6C7011E7338C000B2E2D8 /* AppDelegate.swift in Sources */,
 				80F6C72B1E78349A00B2E2D8 /* UserCell.swift in Sources */,
 				80F6C7241E77001500B2E2D8 /* Extensions.swift in Sources */,
