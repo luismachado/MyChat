@@ -47,8 +47,8 @@ class MessagesController: UITableViewController {
                     let message = Message()
                     message.setValuesForKeys(dictionary)
                     
-                    if let toId = message.toId {
-                        self.messagesDictionary[toId] = message
+                    if let chatPartnerId = message.chatPartnerId() {
+                        self.messagesDictionary[chatPartnerId] = message
                         self.messages = Array(self.messagesDictionary.values) //TODO USE FIELD WITH LASTEST MESSAGE?
                         self.messages.sort(by: { (message1, message2) -> Bool in
                             if let timestamp1 = message1.timestamp?.intValue, let timestamp2 = message2.timestamp?.intValue {
