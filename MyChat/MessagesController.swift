@@ -27,9 +27,6 @@ class MessagesController: UITableViewController {
         checkIfUserIsLoggedIn()
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        
-        //observeMessages()
-        
     }
     
     func observeUserMessages() {
@@ -57,20 +54,20 @@ class MessagesController: UITableViewController {
                             return false
                         })
                     }
+                    // to reload the table just once
+                    self.timer?.invalidate()
+                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
                     
-                    DispatchQueue.main.async(execute: {
-                        self.tableView.reloadData()
-                    })
                 }
             })
         })  
     }
     
+    var timer: Timer?
     
-    func observeMessages() {
-        let ref = FIRDatabase.database().reference().child("messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            
+    func handleReloadTable() {
+        DispatchQueue.main.async(execute: {
+            self.tableView.reloadData()
         })
     }
     
