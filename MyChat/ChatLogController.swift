@@ -8,6 +8,8 @@
 
 import UIKit
 import Firebase
+import MobileCoreServices
+import AVFoundation
 
 class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
@@ -135,6 +137,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     func handleUploadTap() {
         let imagePickerController = UIImagePickerController()
         
+        imagePickerController.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
         
@@ -142,7 +145,70 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        // selected video
+        if let videoUrl = info[UIImagePickerControllerMediaURL] as? URL {
+            handleVideoSelectedForUrl(url: videoUrl)
+        } else {
+            //selected image
+            handleImageSelectedForInfo(info: info as [String : AnyObject])
+        }
         
+        dismiss(animated: true, completion: nil)
+    }
+    
+    private func handleVideoSelectedForUrl(url: URL) {
+        let filename = NSUUID().uuidString + ".mov"
+        let uploadTask = FIRStorage.storage().reference().child("message_movies").child(filename).putFile(url, metadata: nil, completion: { (metadata, error) in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let videoUrl = metadata?.downloadURL()?.absoluteString {
+                if let thumbnailImage = self.thumbnailImageForFileUrl(fileUrl: url) {
+                    
+                    self.uploadToFirebaseStorageUsingImage(image: thumbnailImage, completion: { (imageUrl) in
+                        let properties: [String: AnyObject] = ["videoUrl": videoUrl as AnyObject, "imageUrl" : imageUrl as AnyObject, "imageWidth": thumbnailImage.size.width as AnyObject, "imageHeight" : thumbnailImage.size.height as AnyObject]
+                        self.sendMessageWithProperties(properties: properties)
+                    })
+                }
+            }
+        })
+        
+        uploadTask.observe(.progress) { (snapshot) in
+            // TODO do it in percentage
+            if let progress = snapshot.progress?.completedUnitCount {//, let total = snapshot.progress?.totalUnitCount {
+                //                print(progress)
+                //                print(total)
+                //                if total != 0 {
+                //                    print("Progress \((progress / total) * 100)%")
+                //                }
+                self.navigationItem.title = String(progress)
+            }
+        }
+        
+        uploadTask.observe(.success) { (snapshot) in
+            self.navigationItem.title = self.user?.name
+        }
+    }
+    
+    private func thumbnailImageForFileUrl(fileUrl: URL) -> UIImage? {
+        let asset = AVAsset(url: fileUrl)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        
+        do {
+            let thumbnailCGImage = try imageGenerator.copyCGImage(at: CMTimeMake(1, 60), actualTime: nil)
+            return UIImage(cgImage: thumbnailCGImage)
+            
+        } catch let err {
+            print(err)
+        }
+        
+        return nil
+    }
+    
+    private func handleImageSelectedForInfo(info: [String: AnyObject]) {
         var selectedImageFromPicker: UIImage?
         
         if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
@@ -152,13 +218,14 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         }
         
         if let selectedImage = selectedImageFromPicker {
-            uploadToFirebaseStorageUsingImage(image: selectedImage)
+            uploadToFirebaseStorageUsingImage(image: selectedImage, completion: { (imageUrl) in
+                self.sendMessageWithImageUrl(imageUrl: imageUrl, image: selectedImage)
+            })
         }
-        
-        dismiss(animated: true, completion: nil)
     }
     
-    private func uploadToFirebaseStorageUsingImage(image: UIImage) {
+    
+    private func uploadToFirebaseStorageUsingImage(image: UIImage, completion: @escaping (_ imageUrl: String) -> ()) {
         let imageName = NSUUID().uuidString
         let ref = FIRStorage.storage().reference().child("message_images").child(imageName)
         
@@ -171,7 +238,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                 }
                 
                 if let imageUrl = metadata?.downloadURL()?.absoluteString {
-                    self.sendMessageWithImageUrl(imageUrl: imageUrl, image: image)
+                    completion(imageUrl)
                 }
             })
         }
@@ -218,6 +285,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         cell.chatLogController = self
         
         let message = messages[indexPath.item]
+        
+        cell.message = message
         cell.textView.text = message.text
         
         setupCell(cell: cell, message: message)
@@ -229,6 +298,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             cell.bubbleWidthAnchor?.constant = 200
             cell.textView.isHidden = true
         }
+        
+        cell.playButton.isHidden = message.videoUrl == nil
         
         return cell
     }
@@ -327,8 +398,6 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             let recepientUuserMessagesRef = FIRDatabase.database().reference().child("user-messages").child(toId).child(fromId)
             recepientUuserMessagesRef.updateChildValues([messageId : 1])
         }
-        
-        
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
