@@ -124,6 +124,10 @@ class MessagesController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
         let message = messages[indexPath.row]
+        
+        cell.preservesSuperviewLayoutMargins = false
+        cell.separatorInset = UIEdgeInsets.init(top: 0, left: 62, bottom: 0, right: 0)
+        cell.layoutMargins = UIEdgeInsets.zero
         cell.message = message
     
         return cell

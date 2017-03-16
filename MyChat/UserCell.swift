@@ -17,6 +17,12 @@ class UserCell: UITableViewCell {
             
             detailTextLabel?.text = message?.text
             
+            if message?.videoUrl != nil {
+                detailTextLabel?.text = "Video sent"
+            } else if message?.imageUrl != nil {
+                detailTextLabel?.text = "Image sent"
+            }
+            
             if let seconds = message?.timestamp?.doubleValue { // TODO do for yesterday, last week, etc on other project of messenger!
                 let timestampDate = Date(timeIntervalSince1970: seconds)
                 

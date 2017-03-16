@@ -24,6 +24,7 @@
 		80F6C72D1E784B3000B2E2D8 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */; };
 		80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */; };
 		80FFEF791E7AA494006363C2 /* OptionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF781E7AA494006363C2 /* OptionsController.swift */; };
+		80FFEF7B1E7AADAA006363C2 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatMessageCell.swift; path = MyChat/ChatMessageCell.swift; sourceTree = "<group>"; };
 		80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatInputContainerView.swift; path = MyChat/ChatInputContainerView.swift; sourceTree = "<group>"; };
 		80FFEF781E7AA494006363C2 /* OptionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsController.swift; path = MyChat/OptionsController.swift; sourceTree = "<group>"; };
+		80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,9 +110,9 @@
 			isa = PBXGroup;
 			children = (
 				80F6C7171E75740500B2E2D8 /* LoginController.swift */,
+				80F6C7201E76EB6500B2E2D8 /* LoginController+handlers.swift */,
 				80F6C7021E7338C000B2E2D8 /* MessagesController.swift */,
 				80F6C7191E75CBF300B2E2D8 /* NewMessageController.swift */,
-				80F6C7201E76EB6500B2E2D8 /* LoginController+handlers.swift */,
 				80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */,
 				80FFEF781E7AA494006363C2 /* OptionsController.swift */,
 			);
@@ -130,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				80F6C7231E77001500B2E2D8 /* Extensions.swift */,
+				80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -281,6 +284,7 @@
 				80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */,
 				80F6C71A1E75CBF300B2E2D8 /* NewMessageController.swift in Sources */,
 				80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */,
+				80FFEF7B1E7AADAA006363C2 /* AlertHelper.swift in Sources */,
 				80F6C7281E772AA000B2E2D8 /* Message.swift in Sources */,
 				80F6C7211E76EB6500B2E2D8 /* LoginController+handlers.swift in Sources */,
 				80F6C7181E75740500B2E2D8 /* LoginController.swift in Sources */,

@@ -11,6 +11,32 @@ import Firebase
 
 extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
+    func handleLogin() {
+        
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            print("Form is not valid")
+            return
+        }
+        
+        if email == "" || password == "" {
+            print("Form is not valid")
+            return
+        }
+        
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+            if let error = error {
+                AlertHelper.displayAlert(title: "Login Error", message: error.localizedDescription, displayTo: self)
+                return
+            }
+            
+            print("User successfully logged into Firebase db")
+            self.messagesController?.navigationItem.title = ""
+            self.messagesController?.fetchUserAndSetupNavBarTitle()
+            self.dismiss(animated: true, completion: nil)
+        })
+        
+    }
+    
     func handleRegister() {
         
         guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
@@ -26,7 +52,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user, error) in
             
             if let error = error {
-                print(error) //TODO IF EMPTY DONT SEND
+                AlertHelper.displayAlert(title: "Registration Error", message: error.localizedDescription, displayTo: self)
                 return
             }
             
@@ -60,13 +86,12 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
             
             if let err = err {
-                print(err)
+                AlertHelper.displayAlert(title: "Registration Error", message: err.localizedDescription, displayTo: self)
                 return
             }
             
             print("Saved user successfully into Firebase db")
             
-            //self.messagesController?.fetchUserAndSetupNavBarTitle()
             self.messagesController?.cleanUpTable()
             self.messagesController?.navigationItem.title = values["name"] as? String
             self.dismiss(animated: true, completion: nil)
