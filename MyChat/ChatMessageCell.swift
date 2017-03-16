@@ -51,10 +51,10 @@ class ChatMessageCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        print("called")
+        //print("called")
         
         if let player = player { // TODO NOT ENTERING HERE
-            print("pause")
+            //print("pause")
             player.pause()
         }
         
