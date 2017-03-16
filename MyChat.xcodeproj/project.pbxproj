@@ -22,6 +22,7 @@
 		80F6C7281E772AA000B2E2D8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7271E772AA000B2E2D8 /* Message.swift */; };
 		80F6C72B1E78349A00B2E2D8 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C72A1E78349A00B2E2D8 /* UserCell.swift */; };
 		80F6C72D1E784B3000B2E2D8 /* ChatMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */; };
+		80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		80F6C7271E772AA000B2E2D8 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Message.swift; path = MyChat/Message.swift; sourceTree = "<group>"; };
 		80F6C72A1E78349A00B2E2D8 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserCell.swift; path = MyChat/UserCell.swift; sourceTree = "<group>"; };
 		80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatMessageCell.swift; path = MyChat/ChatMessageCell.swift; sourceTree = "<group>"; };
+		80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatInputContainerView.swift; path = MyChat/ChatInputContainerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 			children = (
 				80F6C72A1E78349A00B2E2D8 /* UserCell.swift */,
 				80F6C72C1E784B3000B2E2D8 /* ChatMessageCell.swift */,
+				80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				80F6C7261E770A5600B2E2D8 /* ChatLogController.swift in Sources */,
+				80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */,
 				80F6C71A1E75CBF300B2E2D8 /* NewMessageController.swift in Sources */,
 				80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */,
 				80F6C7281E772AA000B2E2D8 /* Message.swift in Sources */,
