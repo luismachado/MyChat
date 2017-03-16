@@ -19,7 +19,8 @@ class MessagesController: UITableViewController {
         super.viewDidLoad()
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(showOptionsController))
         
         let image = UIImage(named: "new_message_icon")
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
@@ -184,6 +185,13 @@ class MessagesController: UITableViewController {
                 self.navigationItem.title = dictionary["name"] as? String
             }
         })
+    }
+    
+    func showOptionsController() {
+        let optionsController = OptionsController()
+        optionsController.messagesController = self
+        let navController = UINavigationController(rootViewController: optionsController)
+        present(navController, animated: true, completion: nil)
     }
     
     func showChatControllerForUser(user: User) {
