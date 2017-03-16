@@ -21,7 +21,18 @@ class UserCell: UITableViewCell {
                 let timestampDate = Date(timeIntervalSince1970: seconds)
                 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "hh:mm:ss a"
+                dateFormatter.dateFormat = "h:mm a"
+                
+                let elapsedTimeInSeconds = NSDate().timeIntervalSince(timestampDate)
+                
+                let secondInDays: TimeInterval = 60 * 60 * 24
+                
+                if elapsedTimeInSeconds > 7 * secondInDays {
+                    dateFormatter.dateFormat = "MM/dd/yy"
+                } else if elapsedTimeInSeconds > secondInDays {
+                    dateFormatter.dateFormat = "EEE"
+                }
+                
                 timeLabel.text = dateFormatter.string(from: timestampDate)
             }
         }
@@ -68,6 +79,7 @@ class UserCell: UITableViewCell {
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .right
         return label
     }()
     
@@ -83,7 +95,7 @@ class UserCell: UITableViewCell {
         profileImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
         profileImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
-        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor).isActive = true
+        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -16).isActive = true
         timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
         timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         timeLabel.heightAnchor.constraint(equalTo: (textLabel?.heightAnchor)!).isActive = true
