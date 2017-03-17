@@ -192,7 +192,7 @@ class MessagesController: UITableViewController {
     }
     
     func showOptionsController() {
-        let optionsController = OptionsController()
+        let optionsController = OptionsController(style: .grouped)
         optionsController.messagesController = self
         let navController = UINavigationController(rootViewController: optionsController)
         present(navController, animated: true, completion: nil)
