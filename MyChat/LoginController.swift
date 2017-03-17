@@ -38,17 +38,6 @@ class LoginController: UIViewController, UITextFieldDelegate {
         return button
     }()
     
-    func handleLoginRegister() {
-        self.view.endEditing(true)
-        //TODO SPINNER AND BLOCK SCREEN
-        if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
-            handleLogin()
-        } else {
-            handleRegister()
-        }
-        
-    }
-    
     let nameTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Name"
@@ -107,6 +96,34 @@ class LoginController: UIViewController, UITextFieldDelegate {
         return sc
     }()
     
+    lazy var recoverPasswordButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("Password Recovery", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        button.addTarget(self, action: #selector(handlePasswordRecovery), for: .touchUpInside)
+        return button
+    }()
+    
+    func handlePasswordRecovery() {
+        
+        let passwordRecoveryController = PasswordRecoveryController()
+        present(passwordRecoveryController, animated: true, completion: nil)
+        
+    }
+    
+    func handleLoginRegister() {
+        self.view.endEditing(true)
+        //TODO SPINNER AND BLOCK SCREEN
+        if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
+            handleLogin()
+        } else {
+            handleRegister()
+        }
+        
+    }
+    
     func handleLoginRegisterChange() {
         let title = loginRegisterSegmentedControl.titleForSegment(at: loginRegisterSegmentedControl.selectedSegmentIndex)
         loginRegisterButton.setTitle(title, for: .normal)
@@ -125,6 +142,8 @@ class LoginController: UIViewController, UITextFieldDelegate {
         passwordTextFieldHeightAnchor?.isActive = false
         passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: loginRegisterSegmentedControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
         passwordTextFieldHeightAnchor?.isActive = true
+        
+        recoverPasswordButton.isHidden = loginRegisterSegmentedControl.selectedSegmentIndex != 0
         
         enableDisableLoginRegisterButton()
     }
@@ -150,11 +169,15 @@ class LoginController: UIViewController, UITextFieldDelegate {
         view.addSubview(loginRegisterButton)
         view.addSubview(profileImageView)
         view.addSubview(loginRegisterSegmentedControl)
+        view.addSubview(recoverPasswordButton)
+        
+        recoverPasswordButton.isHidden = true
         
         setupInputsContainerView()
         setupLoginRegisterButton()
         setupProfileImageView()
         setupLoginRegisterSegmentedControl()
+        setupRecoverPasswordButton()
         
         enableDisableLoginRegisterButton()
     }
@@ -263,6 +286,13 @@ class LoginController: UIViewController, UITextFieldDelegate {
         loginRegisterButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
         loginRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+    }
+    
+    func setupRecoverPasswordButton() {
+        recoverPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        recoverPasswordButton.topAnchor.constraint(equalTo: loginRegisterButton.bottomAnchor, constant: 12).isActive = true
+        recoverPasswordButton.widthAnchor.constraint(equalTo: loginRegisterButton.widthAnchor).isActive = true
+        recoverPasswordButton.heightAnchor.constraint(equalToConstant: 30).isActive = true
     }
     
     

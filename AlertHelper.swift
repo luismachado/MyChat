@@ -7,10 +7,10 @@
 import UIKit
 
 class AlertHelper {
-    static func displayAlert(title: String, message: String, displayTo: UIViewController) {
+    static func displayAlert(title: String, message: String, displayTo: UIViewController, completion: @escaping (UIAlertAction) -> Void = { _ in return }) {
         
         let alert = UIAlertController(title: title, message: message , preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: completion))
         
         displayTo.present(alert, animated: true, completion: nil)
         

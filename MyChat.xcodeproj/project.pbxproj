@@ -25,6 +25,7 @@
 		80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */; };
 		80FFEF791E7AA494006363C2 /* OptionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF781E7AA494006363C2 /* OptionsController.swift */; };
 		80FFEF7B1E7AADAA006363C2 /* AlertHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */; };
+		80FFEF7D1E7C2CE5006363C2 /* PasswordRecoveryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80FFEF7C1E7C2CE5006363C2 /* PasswordRecoveryController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		80FFEF761E7A948C006363C2 /* ChatInputContainerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatInputContainerView.swift; path = MyChat/ChatInputContainerView.swift; sourceTree = "<group>"; };
 		80FFEF781E7AA494006363C2 /* OptionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = OptionsController.swift; path = MyChat/OptionsController.swift; sourceTree = "<group>"; };
 		80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertHelper.swift; sourceTree = "<group>"; };
+		80FFEF7C1E7C2CE5006363C2 /* PasswordRecoveryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PasswordRecoveryController.swift; path = MyChat/PasswordRecoveryController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				80F6C7191E75CBF300B2E2D8 /* NewMessageController.swift */,
 				80F6C7251E770A5600B2E2D8 /* ChatLogController.swift */,
 				80FFEF781E7AA494006363C2 /* OptionsController.swift */,
+				80FFEF7C1E7C2CE5006363C2 /* PasswordRecoveryController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -282,6 +285,7 @@
 			files = (
 				80F6C7261E770A5600B2E2D8 /* ChatLogController.swift in Sources */,
 				80FFEF771E7A948C006363C2 /* ChatInputContainerView.swift in Sources */,
+				80FFEF7D1E7C2CE5006363C2 /* PasswordRecoveryController.swift in Sources */,
 				80F6C71A1E75CBF300B2E2D8 /* NewMessageController.swift in Sources */,
 				80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */,
 				80FFEF7B1E7AADAA006363C2 /* AlertHelper.swift in Sources */,
