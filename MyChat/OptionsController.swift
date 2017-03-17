@@ -67,8 +67,7 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         if indexPath.section == 1 {
             return indexPath
-        }
-        
+        }        
         return nil
     }
     
@@ -81,7 +80,10 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
+        let changePasswordController = ChangePasswordController(style: .grouped)
+        navigationController?.pushViewController(changePasswordController, animated: true)
+        
     }
     
     
@@ -105,8 +107,6 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
         
         return cell
     }
-    
-    
     
     func handleSelectProfileImageView() {
         let picker = UIImagePickerController()
@@ -134,7 +134,6 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
         }
         
         dismiss(animated: true, completion: nil)
-        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
