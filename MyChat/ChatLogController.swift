@@ -47,7 +47,13 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         })
     }
     
-    
+    lazy var inputContainerView: ChatInputContainerView = {
+        
+        let chatInputContainerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
+        chatInputContainerView.chatLogController = self
+        return chatInputContainerView
+        
+    }()
     
     let cellId = "cellId"
     
@@ -64,25 +70,14 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
         
+        inputContainerView.enableDisableSendButton()
+        
         setupKeyboardObservers()
     }
     
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
-        view.endEditing(true)
+        inputContainerView.dismissKeyboard()
     }
-    
-    lazy var inputContainerView: ChatInputContainerView = {
-        
-        let chatInputContainerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
-        chatInputContainerView.chatLogController = self
-        return chatInputContainerView
-        
-//        let containerView = UIView()
-//        containerView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50)
-//        containerView.backgroundColor = .white
-        
-    }()
     
     func handleUploadTap() {
         let imagePickerController = UIImagePickerController()
@@ -340,6 +335,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             }
             
             self.inputContainerView.inputTextField.text = ""
+            self.inputContainerView.enableDisableSendButton()
             
             let userMessagesRef = FIRDatabase.database().reference().child("user-messages").child(fromId).child(toId)
             let messageId = childRef.key
@@ -355,6 +351,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     var startingImageView: UIImageView?
     
     func performZoomInForStartingImageView(startingImageView: UIImageView) {
+        dismissKeyboard()
         self.startingImageView = startingImageView
         self.startingImageView?.isHidden = true
         

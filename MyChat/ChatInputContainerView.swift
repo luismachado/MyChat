@@ -65,6 +65,8 @@ class ChatInputContainerView: UIView, UITextFieldDelegate {
         self.inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
         self.inputTextField.heightAnchor.constraint(equalTo: heightAnchor).isActive = true
         
+        self.inputTextField.addTarget(self, action: #selector(enableDisableSendButton), for: UIControlEvents.editingChanged)
+        
         let separatorLineView: UIView = {
             let view = UIView()
             view.backgroundColor = UIColor(r: 220, g: 220, b: 220)
@@ -77,6 +79,14 @@ class ChatInputContainerView: UIView, UITextFieldDelegate {
         separatorLineView.topAnchor.constraint(equalTo: topAnchor).isActive = true
         separatorLineView.widthAnchor.constraint(equalTo: widthAnchor).isActive = true
         separatorLineView.heightAnchor.constraint(equalToConstant: 1).isActive = true
+    }
+    
+    func enableDisableSendButton() {        
+        sendButton.isEnabled = inputTextField.text != ""
+    }
+    
+    func dismissKeyboard() {
+        inputTextField.resignFirstResponder()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
