@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import Firebase
 
 class ChangePasswordController: UITableViewController {
     
@@ -26,7 +26,55 @@ class ChangePasswordController: UITableViewController {
     }
     
     func handleSave() {
-        print("save password todo")
+        
+        guard let currentPasswordCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? PasswordCell else { return }
+        guard let newPasswordCell = tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? PasswordCell else { return }
+        guard let newPasswordCell2 = tableView.cellForRow(at: IndexPath(row: 1, section: 1)) as? PasswordCell else { return }
+        
+        if let currentPassword = currentPasswordCell.passwordField.text, let newPassword = newPasswordCell.passwordField.text, let newPassword2 = newPasswordCell2.passwordField.text {
+            if newPassword != newPassword2 {
+                AlertHelper.displayAlert(title: "Change Password", message: "New password must be equal on both fields.", displayTo: self)
+            } else {
+                
+                reauthenticateAndChangePassword(currentPassword: currentPassword, newPassword: newPassword)
+            }
+            
+        } else {
+            AlertHelper.displayAlert(title: "Change Password", message: "Unable to change the password. Please try again later.", displayTo: self)
+        }
+        
+    }
+    
+    private func reauthenticateAndChangePassword(currentPassword: String, newPassword: String) {
+        guard let email = FIRAuth.auth()?.currentUser?.email else {
+            AlertHelper.displayAlert(title: "Change Password", message: "Unable to change the password. Please try again later.", displayTo: self)
+            return
+        }
+        
+        let credential = FIREmailPasswordAuthProvider.credential(withEmail: email, password: currentPassword)
+        
+        FIRAuth.auth()?.currentUser?.reauthenticate(with: credential, completion: { (error) in
+            
+            if let error = error {
+                AlertHelper.displayAlert(title: "Change Password", message: error.localizedDescription, displayTo: self)
+                return
+            }
+            
+            FIRAuth.auth()?.currentUser?.updatePassword(newPassword, completion: { (error) in
+                
+                if let error = error {
+                    AlertHelper.displayAlert(title: "Change Password", message: error.localizedDescription, displayTo: self)
+                    return
+                }
+                
+                AlertHelper.displayAlert(title: "Change Password", message: "Password changed successfully.", displayTo: self, completion: { (action) in
+                    
+                    self.navigationController?.dismiss(animated: true, completion: nil)
+                    
+                })
+                
+            })
+        })
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -92,12 +140,28 @@ class PasswordCell: UITableViewCell, UITextFieldDelegate {
         tf.clearButtonMode = UITextFieldViewMode.whileEditing
         return tf
     }()
+    
+    let passwordIcon: UIImageView = {
+        let icon = UIImageView()
+        icon.image = UIImage(named: "lock_icon")
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        icon.contentMode = .scaleAspectFill
+        icon.alpha = 0.7
+        return icon
+    }()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         addSubview(passwordField)
-        passwordField.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        addSubview(passwordIcon)
+        
+        passwordIcon.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        passwordIcon.widthAnchor.constraint(equalTo: self.heightAnchor, constant: -8).isActive = true
+        passwordIcon.heightAnchor.constraint(equalTo: self.heightAnchor, constant: -8).isActive = true
+        passwordIcon.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        
+        passwordField.leftAnchor.constraint(equalTo: self.passwordIcon.rightAnchor, constant: 8).isActive = true
         passwordField.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
         passwordField.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         passwordField.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
