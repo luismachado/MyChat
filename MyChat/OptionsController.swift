@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import Firebase
 
 class OptionsController: UITableViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var messagesController: MessagesController?
     let cellId = "cellId"
+    var user: User?
     
     let logoutButton:UIButton = {
         let button = UIButton(type: UIButtonType.system)
@@ -30,7 +32,28 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
         navigationItem.title = "Options"
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(handleBack))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave))
+        navigationItem.rightBarButtonItem?.isEnabled = false
         
+        downloadUser()
+    }
+    
+    func downloadUser() {
+        if let id = FIRAuth.auth()?.currentUser?.uid {
+            
+            let ref = FIRDatabase.database().reference().child("users").child(id)
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    
+                    self.user = User()
+                    self.user?.setValuesForKeys(dictionary)
+                    
+                    if let profileImageCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileOptionsCell {
+                        profileImageCell.user = self.user                        
+                    }
+                }
+            })
+        }
     }
     
     func handleBack() {
@@ -44,7 +67,41 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     }
     
     func handleSave() {
-        print("save")
+        
+        if let profileCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileOptionsCell, let newProfileImage = profileCell.profileImageView.image, let uploadData = UIImageJPEGRepresentation(newProfileImage, 0.1) {
+            
+            let imageName = NSUUID().uuidString
+            let storageRef = FIRStorage.storage().reference().child("profile_images").child("\(imageName).png")
+            
+            storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
+                
+                if let error = error {
+                    AlertHelper.displayAlert(title: "Profile Update", message: error.localizedDescription, displayTo: self)
+                    return
+                }
+                
+                if let profileImageUrl = metadata?.downloadURL()?.absoluteString, let name = self.user?.name, let email = self.user?.email, let uid = FIRAuth.auth()?.currentUser?.uid {
+                    
+                    let values = ["name": name, "email" : email, "profileImageUrl": profileImageUrl]
+                    let ref = FIRDatabase.database().reference().child("users").child(uid)
+                    
+                    ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                        
+                        if let err = err {
+                            AlertHelper.displayAlert(title: "Profile Update", message: err.localizedDescription, displayTo: self)
+                            return
+                        }
+                        
+                        AlertHelper.displayAlert(title: "Profile Update", message: "Profile updated successfully", displayTo: self, completion: { (action) in
+                            self.navigationItem.rightBarButtonItem?.isEnabled = false
+                        })
+                        
+                    })
+                } else {
+                    AlertHelper.displayAlert(title: "Profile Update", message: "Unable to update your profile. Please try again later.", displayTo: self)
+                }
+            })
+        }        
     }
     
     
@@ -130,6 +187,7 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
             let indexPath = IndexPath(row: 0, section: 0)
             if let profileCell = tableView.cellForRow(at: indexPath) as? ProfileOptionsCell {
                 profileCell.profileImageView.image = selectedImage
+                navigationItem.rightBarButtonItem?.isEnabled = true
             }
         }
         

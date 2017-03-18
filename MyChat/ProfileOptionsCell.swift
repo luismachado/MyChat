@@ -13,6 +13,19 @@ class ProfileOptionsCell: UITableViewCell {
     
     var optionsController: OptionsController?
     
+    var user: User? {
+        didSet {
+            
+            self.textLabel?.text = user?.name
+            self.detailTextLabel?.text = user?.email
+            if let profileImageUrl = user?.profileImageUrl {
+                self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl, completion: { 
+                    self.changeProfileImageButton.isEnabled = true
+                })
+            }
+        }
+    }
+    
 //    var message: Message? {
 //        didSet { // TODO this should be done outside as cell is called multiple times!
 //            setupNameAndProfileImage()
@@ -46,26 +59,26 @@ class ProfileOptionsCell: UITableViewCell {
 //        }
 //    }
     
-    private func setupNameAndProfileImage() {
-        
-        if let id = FIRAuth.auth()?.currentUser?.uid {
-            
-            let ref = FIRDatabase.database().reference().child("users").child(id)
-            ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                
-                if let dictionary = snapshot.value as? [String: AnyObject] {
-                    self.textLabel?.text = dictionary["name"] as? String
-                    self.detailTextLabel?.text = dictionary["email"] as? String
-                    
-                    if let profileImageUrl = dictionary["profileImageUrl"] as? String {
-                        self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
-                    }
-                }
-                
-            })
-        }
-        
-    }
+//    private func setupNameAndProfileImage() {
+//        
+//        if let id = FIRAuth.auth()?.currentUser?.uid {
+//            
+//            let ref = FIRDatabase.database().reference().child("users").child(id)
+//            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+//                
+//                if let dictionary = snapshot.value as? [String: AnyObject] {
+//                    self.textLabel?.text = dictionary["name"] as? String
+//                    self.detailTextLabel?.text = dictionary["email"] as? String
+//                    
+//                    if let profileImageUrl = dictionary["profileImageUrl"] as? String {
+//                        self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
+//                    }
+//                }
+//                
+//            })
+//        }
+//        
+//    }
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -86,6 +99,7 @@ class ProfileOptionsCell: UITableViewCell {
     lazy var changeProfileImageButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Change", for: .normal)
+        button.isEnabled = false
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(handleChangeProfileImage), for: .touchUpInside)
         return button
@@ -111,7 +125,7 @@ class ProfileOptionsCell: UITableViewCell {
         changeProfileImageButton.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
         changeProfileImageButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
-        setupNameAndProfileImage()
+        //setupNameAndProfileImage()
     }
     
     required init?(coder aDecoder: NSCoder) {
