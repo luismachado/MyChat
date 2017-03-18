@@ -61,8 +61,12 @@ class NewMessageController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
         let user = users[indexPath.row]
         
+        
         cell.textLabel?.text = user.name
         cell.detailTextLabel?.text = user.email
+        
+        guard let username = user.name else { return cell }
+        cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: user.profileImageUrl, username: username)
         
         if let profileImageUrl = user.profileImageUrl {
             cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)

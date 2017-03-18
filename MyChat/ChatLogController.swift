@@ -251,9 +251,12 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     private func setupCell(cell: ChatMessageCell, message: Message) {
         
-        if let profileImageUrl = self.user?.profileImageUrl {
-            cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
-        }
+        guard let username = self.user?.name else { return }
+        cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: self.user?.profileImageUrl, username: username)
+        
+//        if let profileImageUrl = self.user?.profileImageUrl {
+//            cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
+//        }
         
         if message.fromId == FIRAuth.auth()?.currentUser?.uid {
             //blue

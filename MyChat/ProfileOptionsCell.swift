@@ -18,11 +18,10 @@ class ProfileOptionsCell: UITableViewCell {
             
             self.textLabel?.text = user?.name
             self.detailTextLabel?.text = user?.email
-            if let profileImageUrl = user?.profileImageUrl {
-                self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl, completion: { 
-                    self.changeProfileImageButton.isEnabled = true
-                })
-            }
+            
+            self.profileImageView.loadImageUsingCacheWithUrlString(urlString: user?.profileImageUrl, username: (user?.name)!, completion: {
+                self.changeProfileImageButton.isEnabled = true
+            })
         }
     }
     

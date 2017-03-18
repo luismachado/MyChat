@@ -58,25 +58,29 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             
             guard let uid = user?.uid else {return}
             
-            // successfully authenticated user
-            let imageName = NSUUID().uuidString
-            let storageRef = FIRStorage.storage().reference().child("profile_images").child("\(imageName).png")
+            let values = ["name": name, "email" : email]
+            self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject])
+          
             
-            if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
-                
-                storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
-                    
-                    if let error = error {
-                        print(error)
-                        return
-                    }
-                    
-                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
-                        let values = ["name": name, "email" : email, "profileImageUrl": profileImageUrl]
-                        self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject])
-                    }
-                })
-            }            
+            // successfully authenticated user
+//            let imageName = NSUUID().uuidString
+//            let storageRef = FIRStorage.storage().reference().child("profile_images").child("\(imageName).png")
+//            
+//            if let profileImage = self.profileImageView.image, let uploadData = UIImageJPEGRepresentation(profileImage, 0.1) {
+//                
+//                storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
+//                    
+//                    if let error = error {
+//                        print(error)
+//                        return
+//                    }
+//                    
+//                    if let profileImageUrl = metadata?.downloadURL()?.absoluteString {
+//                        let values = ["name": name, "email" : email, "profileImageUrl": profileImageUrl]
+//                        self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject])
+//                    }
+//                })
+//            }            
         })
     }
     
