@@ -22,7 +22,7 @@ class PasswordRecoveryController: UIViewController, UITextFieldDelegate {
     
     lazy var recoveryButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = UIColor(r: 80, g: 101, b: 161)
+        button.backgroundColor = UIColor(r: 0, g: 107, b: 169)
         button.setTitle("Send recovery email", for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(.white, for: .normal)
@@ -73,7 +73,7 @@ class PasswordRecoveryController: UIViewController, UITextFieldDelegate {
         return label
     }()
     
-    lazy var recoveryImageView: UIImageView = { //TODO change color
+    lazy var recoveryImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "pass_recovery")
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ class PasswordRecoveryController: UIViewController, UITextFieldDelegate {
         emailTextField.delegate = self
         emailTextField.addTarget(self, action: #selector(enableDisableSendButton), for: UIControlEvents.editingChanged)
 
-        view.backgroundColor = UIColor(r: 61, g: 91, b: 151)
+        view.backgroundColor = UIColor(r: 0, g: 121, b: 191)
         view.addSubview(inputsContainerView)
         view.addSubview(recoveryButton)
         view.addSubview(cancelButton)
