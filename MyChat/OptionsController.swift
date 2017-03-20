@@ -70,12 +70,22 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
         
         if let profileCell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileOptionsCell, let newProfileImage = profileCell.profileImageView.image, let uploadData = UIImageJPEGRepresentation(newProfileImage, 0.1) {
             
+            let spinner = AlertHelper.progressBarDisplayer(msg: "Saving...", true, view: self.view)
+            self.view.addSubview(spinner)
+            UIApplication.shared.beginIgnoringInteractionEvents()
+            
+            let onCompletion = {
+                spinner.removeFromSuperview()
+                UIApplication.shared.endIgnoringInteractionEvents()
+            }
+            
             let imageName = NSUUID().uuidString
             let storageRef = FIRStorage.storage().reference().child("profile_images").child("\(imageName).png")
             
             storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
                 
                 if let error = error {
+                    onCompletion()
                     AlertHelper.displayAlert(title: "Profile Update", message: error.localizedDescription, displayTo: self)
                     return
                 }
@@ -88,16 +98,19 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
                     ref.updateChildValues(values, withCompletionBlock: { (err, ref) in
                         
                         if let err = err {
+                            onCompletion()
                             AlertHelper.displayAlert(title: "Profile Update", message: err.localizedDescription, displayTo: self)
                             return
                         }
                         
+                        onCompletion()
                         AlertHelper.displayAlert(title: "Profile Update", message: "Profile updated successfully", displayTo: self, completion: { (action) in
                             self.navigationItem.rightBarButtonItem?.isEnabled = false
                         })
                         
                     })
                 } else {
+                    onCompletion()
                     AlertHelper.displayAlert(title: "Profile Update", message: "Unable to update your profile. Please try again later.", displayTo: self)
                 }
             })

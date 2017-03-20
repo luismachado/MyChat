@@ -37,7 +37,9 @@ class NewMessageController: UITableViewController {
                 //if you user this setter your app will crash if your class props dont match up with the dict from firebase!
                 user.setValuesForKeys(dictionary)
                 
-                self.users.append(user)
+                if user.id != FIRAuth.auth()?.currentUser?.uid {
+                    self.users.append(user)
+                }                
                 
                 DispatchQueue.main.async(execute: {
                     self.tableView.reloadData()

@@ -422,7 +422,7 @@
 				DEVELOPMENT_TEAM = MJHBLUH3VK;
 				INFOPLIST_FILE = MyChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.luismachado.MyChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.luismachado.MySimpleChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
@@ -436,7 +436,7 @@
 				DEVELOPMENT_TEAM = MJHBLUH3VK;
 				INFOPLIST_FILE = MyChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.luismachado.MyChat;
+				PRODUCT_BUNDLE_IDENTIFIER = com.luismachado.MySimpleChat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
 			};
