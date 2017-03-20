@@ -53,6 +53,7 @@ class MessagesController: UITableViewController {
            })
             
 //            Would it make sense to also remove from user-messages?
+//
 //            FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
 //                
 //                if let error = error {
