@@ -38,10 +38,11 @@ class ChatMessageCell: UICollectionViewCell {
         
         if let videoUrlString = message?.videoUrl, let url = URL(string: videoUrlString) {
             player = AVPlayer(url: url)
-            
             playerLayer = AVPlayerLayer(player: player)
             playerLayer?.frame = bubbleView.bounds
             bubbleView.layer.addSublayer(playerLayer!)
+            
+            chatLogController?.saveCellPlayingMedia(cell: self)
             
             player?.play()
             activityIndicatorView.startAnimating()
@@ -50,9 +51,11 @@ class ChatMessageCell: UICollectionViewCell {
     }
     
     func stopPlaying() {
+        print("ChatMessageCell: Stop playing")
         if let existingPlayer = player {
             existingPlayer.pause()
             player = nil
+            playButton.isHidden = false
         }
         
         if let existingPlayerLayer = playerLayer {

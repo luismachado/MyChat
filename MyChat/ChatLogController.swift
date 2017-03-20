@@ -21,6 +21,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     var messages = [Message]()
+    weak var cellPlayingMultimedia: ChatMessageCell?
     
     func observeMessages() {
         guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
@@ -414,6 +415,19 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             })
             
         }
+    }
+    
+    
+    func saveCellPlayingMedia(cell: ChatMessageCell) {
+        if let cellPlayingMultimedia = cellPlayingMultimedia {
+            cellPlayingMultimedia.stopPlaying()
+        }
+        
+        cellPlayingMultimedia = cell
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        cellPlayingMultimedia?.stopPlaying()
     }
 }
 
