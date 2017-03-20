@@ -27,43 +27,54 @@ class MessagesController: UITableViewController {
         checkIfUserIsLoggedIn()
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        //tableView.allowsMultipleSelectionDuringEditing = true
+        tableView.allowsMultipleSelectionDuringEditing = true
     }
     
-//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-//        return true
-//    }
-//    
-//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        
-//        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
-//        
-//        let message = messages[indexPath.row]
-//        
-//        if let chatPartnerId = message.chatPartnerId() {
-//           FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
-//            
-//            if let error = error {
-//                print(error)
-//                return
-//            }
-//            
-//            self.messagesDictionary.removeValue(forKey: chatPartnerId)
-//            self.attemptReloadOfTable()
-//            
-//           })
-//        }
-//    }
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
+        
+        let message = messages[indexPath.row]
+        
+        if let chatPartnerId = message.chatPartnerId() {
+           FIRDatabase.database().reference().child("last-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
+            
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            self.messagesDictionary.removeValue(forKey: chatPartnerId)
+            self.attemptReloadOfTable()
+           })
+            
+//            Would it make sense to also remove from user-messages?
+//            FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
+//                
+//                if let error = error {
+//                    print(error)
+//                    return
+//                }
+//                
+//                self.messagesDictionary.removeValue(forKey: chatPartnerId)
+//                self.attemptReloadOfTable()
+//            })
+        }
+    }
     
     func observeUserMessages() {
         
         guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
         
-        let ref = FIRDatabase.database().reference().child("user-messages").child(uid)
+        let ref = FIRDatabase.database().reference().child("last-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
             
             let userId = snapshot.key
-            FIRDatabase.database().reference().child("user-messages").child(uid).child(userId).observe(.childAdded, with: { (snapshot) in
+            FIRDatabase.database().reference().child("last-messages").child(uid).child(userId).observe(.childAdded, with: { (snapshot) in
                 
                 let messageId = snapshot.key
                 self.fetchMessageWithMessageId(messageId: messageId)
@@ -103,7 +114,7 @@ class MessagesController: UITableViewController {
     
     func handleReloadTable() {
         
-        self.messages = Array(self.messagesDictionary.values) //TODO USE FIELD WITH LASTEST MESSAGE?
+        self.messages = Array(self.messagesDictionary.values)
         self.messages.sort(by: { (message1, message2) -> Bool in
             if let timestamp1 = message1.timestamp?.intValue, let timestamp2 = message2.timestamp?.intValue {
                 return timestamp1 > timestamp2
