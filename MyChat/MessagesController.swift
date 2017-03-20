@@ -19,7 +19,6 @@ class MessagesController: UITableViewController {
         super.viewDidLoad()
         
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
-        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(showOptionsController))
         
         let image = UIImage(named: "new_message_icon")
@@ -28,33 +27,33 @@ class MessagesController: UITableViewController {
         checkIfUserIsLoggedIn()
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        tableView.allowsMultipleSelectionDuringEditing = true
+        //tableView.allowsMultipleSelectionDuringEditing = true
     }
     
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        
-        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
-        
-        let message = messages[indexPath.row]
-        
-        if let chatPartnerId = message.chatPartnerId() {
-           FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
-            
-            if let error = error {
-                print(error)
-                return
-            }
-            
-            self.messagesDictionary.removeValue(forKey: chatPartnerId)
-            self.attemptReloadOfTable()
-            
-           })
-        }
-    }
+//    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+//        return true
+//    }
+//    
+//    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        
+//        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
+//        
+//        let message = messages[indexPath.row]
+//        
+//        if let chatPartnerId = message.chatPartnerId() {
+//           FIRDatabase.database().reference().child("user-messages").child(uid).child(chatPartnerId).removeValue(completionBlock: { (error, ref) in
+//            
+//            if let error = error {
+//                print(error)
+//                return
+//            }
+//            
+//            self.messagesDictionary.removeValue(forKey: chatPartnerId)
+//            self.attemptReloadOfTable()
+//            
+//           })
+//        }
+//    }
     
     func observeUserMessages() {
         
