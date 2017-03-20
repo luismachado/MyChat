@@ -311,7 +311,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     func handleSend() {
-        let properies: [String: AnyObject] = ["text" : inputContainerView.inputTextField.text! as AnyObject] //TODO IF EMPTY DONT SEND
+        let properies: [String: AnyObject] = ["text" : inputContainerView.inputTextField.text! as AnyObject]
         sendMessageWithProperties(properties: properies)
     }
     
