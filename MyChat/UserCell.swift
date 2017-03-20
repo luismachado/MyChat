@@ -12,7 +12,7 @@ import Firebase
 class UserCell: UITableViewCell {
     
     var message: Message? {
-        didSet { // TODO this should be done outside as cell is called multiple times!
+        didSet {
             setupNameAndProfileImage()
             
             detailTextLabel?.text = message?.text
@@ -46,18 +46,12 @@ class UserCell: UITableViewCell {
     
     private func setupNameAndProfileImage() {
         
-        if let id = message?.chatPartnerId() {
+        if let user = message?.user {
             
-            let ref = FIRDatabase.database().reference().child("users").child(id)
-            ref.observeSingleEvent(of: .value, with: { (snapshot) in
-                
-                if let dictionary = snapshot.value as? [String: AnyObject] {
-                    self.textLabel?.text = dictionary["name"] as? String
-                    
-                    guard let username = dictionary["name"] as? String else { return }                    
-                    self.profileImageView.loadImageUsingCacheWithUrlString(urlString: dictionary["profileImageUrl"] as? String, username: username)
-                }
-            })
+            guard let username = user.name else { return }
+            
+            self.textLabel?.text = username
+            self.profileImageView.loadImageUsingCacheWithUrlString(urlString: user.profileImageUrl, username: username)
         }
     }
     

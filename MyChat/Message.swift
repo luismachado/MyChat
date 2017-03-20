@@ -22,6 +22,8 @@ class Message: NSObject {
     
     var videoUrl: String?
     
+    var user: User?
+    
     func chatPartnerId() -> String? {
         return fromId  == FIRAuth.auth()?.currentUser?.uid ? toId : fromId
     }
@@ -39,6 +41,24 @@ class Message: NSObject {
         imageWidth = dictionary["imageWidth"] as? NSNumber
         
         videoUrl = dictionary["videoUrl"] as? String
+    }
+    
+    // Used on MessagesController, to avoid querying the database on each cell
+    func obtainUser() {
+        
+        if let id = self.chatPartnerId() {
+            
+            let ref = FIRDatabase.database().reference().child("users").child(id)
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    
+                    self.user = User()
+                    self.user?.id = snapshot.key
+                    self.user?.setValuesForKeys(dictionary)
+                }
+            })
+        }
     }
 
 }
