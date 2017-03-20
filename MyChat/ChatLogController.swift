@@ -122,14 +122,15 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         })
         
         uploadTask.observe(.progress) { (snapshot) in
-            // TODO do it in percentage
-            if let progress = snapshot.progress?.completedUnitCount {//, let total = snapshot.progress?.totalUnitCount {
-                //                print(progress)
-                //                print(total)
-                //                if total != 0 {
-                //                    print("Progress \((progress / total) * 100)%")
-                //                }
-                self.navigationItem.title = String(progress)
+            if let progress = snapshot.progress?.completedUnitCount, let total = snapshot.progress?.totalUnitCount{
+
+                var percentage = 0
+                if total != 0 {
+                    let value = Double(progress) / Double(total)
+                    percentage = Int(value * 100)
+                }
+                
+                self.navigationItem.title = "Progress \(percentage)%"
             }
         }
         
@@ -373,12 +374,14 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(zoomingImageView)
             
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {  //TODO IF LET startingframe
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                
+                guard let startingFrame = self.startingFrame else { return }
                 
                 self.blackBackgroundView?.alpha = 1
                 self.inputContainerView.alpha = 0
                 
-                let height = self.startingFrame!.height / self.startingFrame!.width * keyWindow.frame.width
+                let height = startingFrame.height / startingFrame.width * keyWindow.frame.width
                 zoomingImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
                 zoomingImageView.center = keyWindow.center
             }, completion: nil)
@@ -390,8 +393,11 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             zoomOutImageView.layer.cornerRadius = 16
             zoomOutImageView.clipsToBounds = true
             
-            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: { 
-                zoomOutImageView.frame = self.startingFrame!
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                
+                 guard let startingFrame = self.startingFrame else { return }
+                
+                zoomOutImageView.frame = startingFrame
                 self.blackBackgroundView?.alpha = 0
                 self.inputContainerView.alpha = 1
             }, completion: { (completed) in
