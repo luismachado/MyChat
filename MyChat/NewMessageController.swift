@@ -66,7 +66,7 @@ class NewMessageController: UITableViewController {
         
         
         cell.textLabel?.text = user.name
-        cell.detailTextLabel?.text = user.email
+        //cell.detailTextLabel?.text = user.email
         
         guard let username = user.name else { return cell }
         cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: user.profileImageUrl, username: username)
