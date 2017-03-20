@@ -49,21 +49,20 @@ class ChatMessageCell: UICollectionViewCell {
         }
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        //print("called")
-        
-        if let player = player { // TODO NOT ENTERING HERE
-            //print("pause")
-            player.pause()
+    func stopPlaying() {
+        if let existingPlayer = player {
+            existingPlayer.pause()
+            player = nil
         }
         
-        playerLayer?.removeFromSuperlayer() // TODO NOT ENTERING HERE
+        if let existingPlayerLayer = playerLayer {
+            existingPlayerLayer.removeFromSuperlayer()
+            playerLayer = nil
+        }
         
         activityIndicatorView.stopAnimating()
-        
     }
-    
+        
     let textView: UITextView = {
         let tv = UITextView()
         tv.text = "SAMPLE TEXT FOR NOW"

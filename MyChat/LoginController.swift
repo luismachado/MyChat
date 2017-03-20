@@ -114,11 +114,25 @@ class LoginController: UIViewController, UITextFieldDelegate {
     
     func handleLoginRegister() {
         self.view.endEditing(true)
-        //TODO SPINNER AND BLOCK SCREEN
+        
+        var type = "Logging in..."
+        if loginRegisterSegmentedControl.selectedSegmentIndex == 1 {
+            type = "Registering..."
+        }
+        
+        let spinner = AlertHelper.progressBarDisplayer(msg: type, true, view: self.view)
+        self.view.addSubview(spinner)
+        UIApplication.shared.beginIgnoringInteractionEvents()
+        
+        let onCompletion = {
+            spinner.removeFromSuperview()
+            UIApplication.shared.endIgnoringInteractionEvents()
+        }
+        
         if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
-            handleLogin()
+            handleLogin(completion: onCompletion)
         } else {
-            handleRegister()
+            handleRegister(completion: onCompletion)
         }
         
     }

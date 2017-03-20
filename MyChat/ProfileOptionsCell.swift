@@ -25,60 +25,6 @@ class ProfileOptionsCell: UITableViewCell {
         }
     }
     
-//    var message: Message? {
-//        didSet { // TODO this should be done outside as cell is called multiple times!
-//            setupNameAndProfileImage()
-//            
-//            detailTextLabel?.text = message?.text
-//            
-//            if message?.videoUrl != nil {
-//                detailTextLabel?.text = "Video sent"
-//            } else if message?.imageUrl != nil {
-//                detailTextLabel?.text = "Image sent"
-//            }
-//            
-//            if let seconds = message?.timestamp?.doubleValue { // TODO do for yesterday, last week, etc on other project of messenger!
-//                let timestampDate = Date(timeIntervalSince1970: seconds)
-//                
-//                let dateFormatter = DateFormatter()
-//                dateFormatter.dateFormat = "h:mm a"
-//                
-//                let elapsedTimeInSeconds = NSDate().timeIntervalSince(timestampDate)
-//                
-//                let secondInDays: TimeInterval = 60 * 60 * 24
-//                
-//                if elapsedTimeInSeconds > 7 * secondInDays {
-//                    dateFormatter.dateFormat = "MM/dd/yy"
-//                } else if elapsedTimeInSeconds > secondInDays {
-//                    dateFormatter.dateFormat = "EEE"
-//                }
-//                
-//                timeLabel.text = dateFormatter.string(from: timestampDate)
-//            }
-//        }
-//    }
-    
-//    private func setupNameAndProfileImage() {
-//        
-//        if let id = FIRAuth.auth()?.currentUser?.uid {
-//            
-//            let ref = FIRDatabase.database().reference().child("users").child(id)
-//            ref.observeSingleEvent(of: .value, with: { (snapshot) in
-//                
-//                if let dictionary = snapshot.value as? [String: AnyObject] {
-//                    self.textLabel?.text = dictionary["name"] as? String
-//                    self.detailTextLabel?.text = dictionary["email"] as? String
-//                    
-//                    if let profileImageUrl = dictionary["profileImageUrl"] as? String {
-//                        self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
-//                    }
-//                }
-//                
-//            })
-//        }
-//        
-//    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -123,8 +69,6 @@ class ProfileOptionsCell: UITableViewCell {
         changeProfileImageButton.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: 5).isActive = true
         changeProfileImageButton.widthAnchor.constraint(equalTo: profileImageView.widthAnchor).isActive = true
         changeProfileImageButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        
-        //setupNameAndProfileImage()
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -23,7 +23,7 @@ class UserCell: UITableViewCell {
                 detailTextLabel?.text = "Image sent"
             }
             
-            if let seconds = message?.timestamp?.doubleValue { // TODO do for yesterday, last week, etc on other project of messenger!
+            if let seconds = message?.timestamp?.doubleValue {
                 let timestampDate = Date(timeIntervalSince1970: seconds)
                 
                 let dateFormatter = DateFormatter()
@@ -56,15 +56,9 @@ class UserCell: UITableViewCell {
                     
                     guard let username = dictionary["name"] as? String else { return }                    
                     self.profileImageView.loadImageUsingCacheWithUrlString(urlString: dictionary["profileImageUrl"] as? String, username: username)
-                    
-//                    if let profileImageUrl = dictionary["profileImageUrl"] as? String {
-//                        self.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
-//                    }
                 }
-                
             })
         }
-
     }
     
     override func layoutSubviews() {

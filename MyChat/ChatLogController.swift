@@ -250,14 +250,16 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let chatCell = cell as? ChatMessageCell {
+            chatCell.stopPlaying()
+        }
+    }
+    
     private func setupCell(cell: ChatMessageCell, message: Message) {
         
         guard let username = self.user?.name else { return }
         cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: self.user?.profileImageUrl, username: username)
-        
-//        if let profileImageUrl = self.user?.profileImageUrl {
-//            cell.profileImageView.loadImageUsingCacheWithUrlString(urlString: profileImageUrl)
-//        }
         
         if message.fromId == FIRAuth.auth()?.currentUser?.uid {
             //blue
