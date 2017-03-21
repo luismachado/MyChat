@@ -73,7 +73,6 @@ class MessagesController: UITableViewController {
         
         let ref = FIRDatabase.database().reference().child("last-messages").child(uid)
         ref.observe(.childAdded, with: { (snapshot) in
-            
             let userId = snapshot.key
             FIRDatabase.database().reference().child("last-messages").child(uid).child(userId).observe(.childAdded, with: { (snapshot) in
                 
@@ -91,12 +90,10 @@ class MessagesController: UITableViewController {
     
     private func fetchMessageWithMessageId(messageId: String) {
         let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
-        
         messagesReference.observeSingleEvent(of: .value, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
                 message.obtainUser()
-                
                 if let chatPartnerId = message.chatPartnerId() {
                     self.messagesDictionary[chatPartnerId] = message
                 }
@@ -115,7 +112,6 @@ class MessagesController: UITableViewController {
     var timer: Timer?
     
     func handleReloadTable() {
-        
         self.messages = Array(self.messagesDictionary.values)
         self.messages.sort(by: { (message1, message2) -> Bool in
             if let timestamp1 = message1.timestamp?.intValue, let timestamp2 = message2.timestamp?.intValue {

@@ -85,6 +85,8 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             
             self.messagesController?.cleanUpTable()
             self.messagesController?.navigationItem.title = values["name"] as? String
+            self.messagesController?.cleanUpTable()
+            self.messagesController?.observeUserMessages()
             completion()
             self.dismiss(animated: true, completion: nil)
             
