@@ -93,13 +93,28 @@ class MessagesController: UITableViewController {
         messagesReference.observeSingleEvent(of: .value, with: { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
-                message.obtainUser()
-                if let chatPartnerId = message.chatPartnerId() {
-                    self.messagesDictionary[chatPartnerId] = message
+                
+                if let id = message.chatPartnerId() {
+                    
+                    let ref = FIRDatabase.database().reference().child("users").child(id)
+                    ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                        
+                        if let dictionary = snapshot.value as? [String: AnyObject] {
+                            
+                            message.user = User()
+                            message.user?.id = snapshot.key
+                            message.user?.setValuesForKeys(dictionary)
+                            
+                            if let chatPartnerId = message.chatPartnerId() {
+                                self.messagesDictionary[chatPartnerId] = message
+                            }
+                            
+                            // to reload the table just once
+                            self.attemptReloadOfTable()                            
+                        }
+                    })
                 }
                 
-                // to reload the table just once
-                self.attemptReloadOfTable()
             }
         })
     }
