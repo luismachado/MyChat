@@ -7,6 +7,29 @@
 import UIKit
 
 class AlertHelper {
+    
+    static func displayEula(displayTo: UIViewController, completion: @escaping (UIAlertAction) -> Void) {
+        let alert = UIAlertController(title: "End User License Agreement", message: Eula.eula, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .destructive, handler: completion))
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        
+//        let paragraphStyle = NSMutableParagraphStyle()
+//        paragraphStyle.alignment = .left
+//        
+//        let messageText = NSMutableAttributedString(
+//            string: Eula.eula,
+//            attributes: [
+//                NSParagraphStyleAttributeName: paragraphStyle,
+//                NSFontAttributeName : UIFont.preferredFont(forTextStyle: .body),
+//                NSForegroundColorAttributeName : UIColor.black
+//            ]
+//        )
+//        
+//        alert.setValue(messageText, forKey: "attributedMessage")
+        displayTo.present(alert, animated: true, completion: nil)
+    }
+    
+    
     static func displayAlert(title: String, message: String, displayTo: UIViewController, completion: @escaping (UIAlertAction) -> Void = { _ in return }) {
         
         let alert = UIAlertController(title: title, message: message , preferredStyle: UIAlertControllerStyle.alert)

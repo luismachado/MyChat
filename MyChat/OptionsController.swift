@@ -118,7 +118,7 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        return 4
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -134,7 +134,7 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath.section == 1 {
+        if indexPath.section == 1 || indexPath.section == 2 {
             return indexPath
         }        
         return nil
@@ -150,8 +150,13 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let changePasswordController = ChangePasswordController(style: .grouped)
-        navigationController?.pushViewController(changePasswordController, animated: true)
+        if indexPath.section == 1 {
+            let changePasswordController = ChangePasswordController(style: .grouped)
+            navigationController?.pushViewController(changePasswordController, animated: true)
+        } else if indexPath.section == 2 {
+            let eulaController = EulaController()
+            navigationController?.pushViewController(eulaController, animated: true)
+        }
         
     }
     
@@ -166,12 +171,15 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
         } else if indexPath.section == 1 {
             cell.textLabel?.text = "Change Password"
             cell.accessoryType = .disclosureIndicator
-        } else if indexPath.section == 2 {
+        } else if indexPath.section == 3 {
             cell.addSubview(logoutButton)
             logoutButton.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
             logoutButton.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
             logoutButton.centerXAnchor.constraint(equalTo: cell.centerXAnchor).isActive = true
             logoutButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        } else if indexPath.section == 2 {
+            cell.textLabel?.text = "End User License Agreement"
+            cell.accessoryType = .disclosureIndicator
         }
         
         return cell

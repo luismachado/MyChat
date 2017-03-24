@@ -10,6 +10,8 @@
 		6DE4662F4BDCA8DB8BEBB517 /* Pods_MyChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A4000DC9695FBD732F870D4 /* Pods_MyChat.framework */; };
 		803D3FEE1E7C4E4E00BB19EF /* ProfileOptionsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803D3FED1E7C4E4E00BB19EF /* ProfileOptionsCell.swift */; };
 		803D3FF01E7C5B9800BB19EF /* ChangePasswordController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 803D3FEF1E7C5B9800BB19EF /* ChangePasswordController.swift */; };
+		8053D40C1E854F3B00C45853 /* Eula.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053D40B1E854F3B00C45853 /* Eula.swift */; };
+		8053D40E1E85574100C45853 /* EulaController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8053D40D1E85574100C45853 /* EulaController.swift */; };
 		80F6C7011E7338C000B2E2D8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7001E7338C000B2E2D8 /* AppDelegate.swift */; };
 		80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80F6C7021E7338C000B2E2D8 /* MessagesController.swift */; };
 		80F6C7081E7338C100B2E2D8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 80F6C7071E7338C100B2E2D8 /* Assets.xcassets */; };
@@ -36,6 +38,8 @@
 		420341999DCE1F2155DCCC2D /* Pods-MyChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyChat.release.xcconfig"; path = "Pods/Target Support Files/Pods-MyChat/Pods-MyChat.release.xcconfig"; sourceTree = "<group>"; };
 		803D3FED1E7C4E4E00BB19EF /* ProfileOptionsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileOptionsCell.swift; path = MyChat/ProfileOptionsCell.swift; sourceTree = "<group>"; };
 		803D3FEF1E7C5B9800BB19EF /* ChangePasswordController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChangePasswordController.swift; path = MyChat/ChangePasswordController.swift; sourceTree = "<group>"; };
+		8053D40B1E854F3B00C45853 /* Eula.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Eula.swift; sourceTree = "<group>"; };
+		8053D40D1E85574100C45853 /* EulaController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = EulaController.swift; path = MyChat/EulaController.swift; sourceTree = "<group>"; };
 		80F6C6FD1E7338C000B2E2D8 /* MyChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		80F6C7001E7338C000B2E2D8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		80F6C7021E7338C000B2E2D8 /* MessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MessagesController.swift; path = MyChat/MessagesController.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 				80FFEF781E7AA494006363C2 /* OptionsController.swift */,
 				80FFEF7C1E7C2CE5006363C2 /* PasswordRecoveryController.swift */,
 				803D3FEF1E7C5B9800BB19EF /* ChangePasswordController.swift */,
+				8053D40D1E85574100C45853 /* EulaController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -141,6 +146,7 @@
 			children = (
 				80F6C7231E77001500B2E2D8 /* Extensions.swift */,
 				80FFEF7A1E7AADAA006363C2 /* AlertHelper.swift */,
+				8053D40B1E854F3B00C45853 /* Eula.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -297,9 +303,11 @@
 				80F6C7031E7338C000B2E2D8 /* MessagesController.swift in Sources */,
 				80FFEF7B1E7AADAA006363C2 /* AlertHelper.swift in Sources */,
 				80F6C7281E772AA000B2E2D8 /* Message.swift in Sources */,
+				8053D40C1E854F3B00C45853 /* Eula.swift in Sources */,
 				80F6C7211E76EB6500B2E2D8 /* LoginController+handlers.swift in Sources */,
 				80F6C7181E75740500B2E2D8 /* LoginController.swift in Sources */,
 				80F6C71F1E76D65400B2E2D8 /* User.swift in Sources */,
+				8053D40E1E85574100C45853 /* EulaController.swift in Sources */,
 				80FFEF791E7AA494006363C2 /* OptionsController.swift in Sources */,
 				803D3FF01E7C5B9800BB19EF /* ChangePasswordController.swift in Sources */,
 				80F6C72D1E784B3000B2E2D8 /* ChatMessageCell.swift in Sources */,

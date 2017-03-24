@@ -115,8 +115,21 @@ class LoginController: UIViewController, UITextFieldDelegate {
     func handleLoginRegister() {
         self.view.endEditing(true)
         
-        var type = "Logging in..."
         if loginRegisterSegmentedControl.selectedSegmentIndex == 1 {
+            AlertHelper.displayEula(displayTo: self, completion: { (action) in
+                self.setupLoginRegister(isRegistering: true)
+            })
+        } else {
+            setupLoginRegister(isRegistering: false)
+        }
+        
+        
+    }
+    
+    private func setupLoginRegister(isRegistering: Bool) {
+        
+        var type = "Logging in..."
+        if isRegistering {
             type = "Registering..."
         }
         
@@ -129,10 +142,10 @@ class LoginController: UIViewController, UITextFieldDelegate {
             UIApplication.shared.endIgnoringInteractionEvents()
         }
         
-        if loginRegisterSegmentedControl.selectedSegmentIndex == 0 {
-            handleLogin(completion: onCompletion)
-        } else {
+        if isRegistering {
             handleRegister(completion: onCompletion)
+        } else {
+            handleLogin(completion: onCompletion)
         }
         
     }
