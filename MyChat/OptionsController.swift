@@ -45,8 +45,7 @@ class OptionsController: UITableViewController, UIImagePickerControllerDelegate,
                 
                 if let dictionary = snapshot.value as? [String: AnyObject] {
                     
-                    self.user = User()
-                    self.user?.setValuesForKeys(dictionary)
+                    self.user = User(id: id, dictionary: dictionary)
                     
                     if let profileImageCell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ProfileOptionsCell {
                         profileImageCell.user = self.user                        

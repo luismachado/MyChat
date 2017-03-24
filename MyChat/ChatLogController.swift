@@ -17,6 +17,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         didSet {
             navigationItem.title = user?.name
             observeMessages()
+            observeUserBlockedBy()
         }
     }
     
@@ -48,6 +49,23 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         })
     }
     
+    func observeUserBlockedBy() {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
+        let userRef = FIRDatabase.database().reference().child("users").child(uid).child("blocked_by")
+        userRef.observe(.childAdded, with: { (snapshot) in
+            
+            if snapshot.key == self.user?.id {
+                self.inputContainerView.blockChatInputController()
+            }
+        })
+        userRef.observe(.childRemoved, with: { (snapshot) in
+            
+            if snapshot.key == self.user?.id {
+                self.inputContainerView.unblockChatInputController()
+            }
+        })
+    }
+    
     lazy var inputContainerView: ChatInputContainerView = {
         
         let chatInputContainerView = ChatInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 50))
@@ -60,6 +78,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Report", style: .plain, target: self, action: #selector(showReportActions))
         
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
         collectionView?.alwaysBounceVertical = true
@@ -74,6 +94,40 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         inputContainerView.enableDisableSendButton()
         
         setupKeyboardObservers()
+    }
+    
+    func showReportActions() {
+        // 1
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .actionSheet)
+        
+        let reportAction = UIAlertAction(title: "Report User" , style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            
+            self.reportUser()
+            
+        })
+        
+        let blockAction = UIAlertAction(title: "Block User", style: .default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            
+            self.blockUser()
+            
+            
+        })
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+        })
+        
+        
+        // 4
+        optionMenu.addAction(reportAction)
+        optionMenu.addAction(blockAction)
+        optionMenu.addAction(cancelAction)
+        
+        
+        // 5
+        self.present(optionMenu, animated: true, completion: nil)
     }
     
     func dismissKeyboard() {
@@ -428,6 +482,59 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     
     override func viewWillDisappear(_ animated: Bool) {
         cellPlayingMultimedia?.stopPlaying()
+    }
+    
+    private func reportUser() {
+        let ref = FIRDatabase.database().reference().child("user-reports")
+        let childRef = ref.childByAutoId()
+        let reportedUser = user!.id!
+        let userWhoReported = FIRAuth.auth()!.currentUser!.uid
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+        let values: [String: AnyObject] = ["userReported" : reportedUser as AnyObject, "whoReported" : userWhoReported as AnyObject, "timestamp" : timestamp]
+
+        childRef.updateChildValues(values) { (error, ref) in
+            
+            if let error = error {
+                print(error)
+                AlertHelper.displayAlert(title: "Report User", message: "Unable to report user. Plese try again later.", displayTo: self)
+                return
+            }
+            
+            AlertHelper.displayAlert(title: "Report User", message: "User reported. A moderator will look at this report and act accordingly.", displayTo: self)
+        }
+    }
+    
+    private func blockUser() {
+        
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else { AlertHelper.displayAlert(title: "Block User", message: "Unable to block user. Plese try again later.", displayTo: self); return }
+        guard let block_uid = user?.id else { AlertHelper.displayAlert(title: "Block User", message: "Unable to block user. Plese try again later.", displayTo: self); return }
+        
+        
+        let ref = FIRDatabase.database().reference().child("users").child(uid).child("blocked_users")
+        
+        ref.updateChildValues([block_uid : 1]) { (error, ref) in
+            
+            if let error = error {
+                print(error)
+                AlertHelper.displayAlert(title: "Block User", message: "Unable to block user. Plese try again later.", displayTo: self)
+                return
+            }
+            
+            let ref_blocked = FIRDatabase.database().reference().child("users").child(block_uid).child("blocked_by")
+            ref_blocked.updateChildValues([uid : 1]) { (error, ref) in
+                
+                if let error = error {
+                    print(error)
+                    AlertHelper.displayAlert(title: "Block User", message: "Unable to block user. Plese try again later.", displayTo: self)
+                    return
+                }
+                
+                AlertHelper.displayAlert(title: "Block User", message: "User is blocked and will no longer be visible.", displayTo: self, completion: { (action) in
+                    _ = self.navigationController?.popViewController(animated: true)
+                })
+                
+            }
+        }
     }
 }
 

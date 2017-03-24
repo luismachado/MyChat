@@ -12,6 +12,7 @@ import Firebase
 class NewMessageController: UITableViewController {
 
     let cellId = "cellId"
+    var currentUser: User?
     var users = [User]()
     
     override func viewDidLoad() {
@@ -31,14 +32,17 @@ class NewMessageController: UITableViewController {
         FIRDatabase.database().reference().child("users").observe(.childAdded, with: { (snapshot) in
             
             if let dictionary = snapshot.value as? [String : AnyObject] {
-                let user = User()
-                user.id = snapshot.key
                 
-                //if you user this setter your app will crash if your class props dont match up with the dict from firebase!
-                user.setValuesForKeys(dictionary)
+                
+                let user = User(id: snapshot.key, dictionary: dictionary)
                 
                 if user.id != FIRAuth.auth()?.currentUser?.uid {
-                    self.users.append(user)
+                    
+                    if let userId = user.id {
+                        if self.currentUser?.blockedUsers?[userId] == nil && self.currentUser?.blockedBy?[userId] == nil {                            
+                            self.users.append(user)
+                        }
+                    }
                 }                
                 
                 DispatchQueue.main.async(execute: {

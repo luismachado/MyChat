@@ -85,6 +85,22 @@ class ChatInputContainerView: UIView, UITextFieldDelegate {
         sendButton.isEnabled = inputTextField.text != ""
     }
     
+    func blockChatInputController() {
+        sendButton.isEnabled = false
+        inputTextField.text = ""
+        inputTextField.placeholder = "This user blocked you."
+        self.isUserInteractionEnabled = false
+        
+    }
+    
+    func unblockChatInputController() {
+        sendButton.isEnabled = false
+        inputTextField.text = ""
+        inputTextField.placeholder = "Enter message..."
+        self.isUserInteractionEnabled = true
+        
+    }
+    
     func dismissKeyboard() {
         inputTextField.resignFirstResponder()
     }

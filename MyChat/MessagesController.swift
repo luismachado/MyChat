@@ -12,6 +12,7 @@ import Firebase
 class MessagesController: UITableViewController {
     
     var messages = [Message]()
+    var currentUser: User?
     var messagesDictionary = [String: Message]()
     let cellId = "cellId"
 
@@ -88,6 +89,31 @@ class MessagesController: UITableViewController {
         
     }
     
+    func observeUserBlocks() {
+        guard let uid = FIRAuth.auth()?.currentUser?.uid else { return }
+        let userRefBlockedBy = FIRDatabase.database().reference().child("users").child(uid).child("blocked_by")
+        userRefBlockedBy.observe(.childAdded, with: { (snapshot) in
+            self.currentUser?.blockedBy?[snapshot.key] = 1 as AnyObject?
+            self.attemptReloadOfTable()
+
+        })
+        userRefBlockedBy.observe(.childRemoved, with: { (snapshot) in
+            _ = self.currentUser?.blockedBy?.removeValue(forKey: snapshot.key)
+            self.attemptReloadOfTable()
+        })
+        
+        let userRefBlocked = FIRDatabase.database().reference().child("users").child(uid).child("blocked_users")
+        userRefBlocked.observe(.childAdded, with: { (snapshot) in
+            self.currentUser?.blockedUsers?[snapshot.key] = 1 as AnyObject?
+            self.attemptReloadOfTable()
+            
+        })
+        userRefBlocked.observe(.childRemoved, with: { (snapshot) in
+            _ = self.currentUser?.blockedUsers?.removeValue(forKey: snapshot.key)
+            self.attemptReloadOfTable()
+        })
+    }
+    
     private func fetchMessageWithMessageId(messageId: String) {
         let messagesReference = FIRDatabase.database().reference().child("messages").child(messageId)
         messagesReference.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -101,9 +127,7 @@ class MessagesController: UITableViewController {
                         
                         if let dictionary = snapshot.value as? [String: AnyObject] {
                             
-                            message.user = User()
-                            message.user?.id = snapshot.key
-                            message.user?.setValuesForKeys(dictionary)
+                            message.user = User(id: snapshot.key, dictionary: dictionary)
                             
                             if let chatPartnerId = message.chatPartnerId() {
                                 self.messagesDictionary[chatPartnerId] = message
@@ -127,7 +151,16 @@ class MessagesController: UITableViewController {
     var timer: Timer?
     
     func handleReloadTable() {
-        self.messages = Array(self.messagesDictionary.values)
+        self.messages = [Message]()
+        for user in  Array(self.messagesDictionary.keys) {
+            if currentUser?.blockedUsers?[user] == nil && currentUser?.blockedBy?[user] == nil {
+                if let message = self.messagesDictionary[user] {
+                    self.messages.append(message)
+                }
+            }
+        }
+        
+        //self.messages = Array(self.messagesDictionary.values)
         self.messages.sort(by: { (message1, message2) -> Bool in
             if let timestamp1 = message1.timestamp?.intValue, let timestamp2 = message2.timestamp?.intValue {
                 return timestamp1 > timestamp2
@@ -171,9 +204,7 @@ class MessagesController: UITableViewController {
             
             guard let dictionary = snapshot.value as? [String : AnyObject] else { return }
             
-            let user = User()
-            user.id = chatPartnerId
-            user.setValuesForKeys(dictionary)
+            let user = User(id: chatPartnerId, dictionary: dictionary)
             self.showChatControllerForUser(user: user)            
         })
     }
@@ -181,6 +212,7 @@ class MessagesController: UITableViewController {
     func handleNewMessage() {
         let newMessageController = NewMessageController()
         newMessageController.messagesController = self
+        newMessageController.currentUser = currentUser
         let navController = UINavigationController(rootViewController: newMessageController)
         present(navController, animated: true, completion: nil)
     }
@@ -204,12 +236,14 @@ class MessagesController: UITableViewController {
         
         cleanUpTable()
         
-        observeUserMessages()
-        
         FIRDatabase.database().reference().child("users").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             
             if let dictionary = snapshot.value as? [String: AnyObject] {
+                
                 self.navigationItem.title = dictionary["name"] as? String
+                self.currentUser = User(id: snapshot.key, dictionary: dictionary)
+                self.observeUserMessages()
+                self.observeUserBlocks()
             }
         })
     }
