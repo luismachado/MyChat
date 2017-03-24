@@ -36,7 +36,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 
                 guard let dictionary = snapshot.value as? [String : AnyObject] else { return }
-                let message = Message(dictionary: dictionary)
+                let message = Message(id: snapshot.key, dictionary: dictionary)
                 
                 self.messages.append(message)
                 DispatchQueue.main.async(execute: {
@@ -323,6 +323,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             cell.profileImageView.isHidden = true
             cell.bubbleViewLeftAnchor?.isActive = false
             cell.bubbleViewRightAnchor?.isActive = true
+            cell.reportButton.isHidden = true
         } else {
             //gray
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
@@ -330,6 +331,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             cell.profileImageView.isHidden = false
             cell.bubbleViewRightAnchor?.isActive = false
             cell.bubbleViewLeftAnchor?.isActive = true
+            cell.reportButton.isHidden = false
         }
         
         if let messageImageUrl = message.imageUrl {
@@ -339,6 +341,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             cell.bubbleView.backgroundColor = .clear
         } else {
             cell.messageImageView.isHidden = true
+            cell.reportButton.isHidden = true
         }
     }
     
@@ -484,15 +487,35 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         cellPlayingMultimedia?.stopPlaying()
     }
     
-    private func reportUser() {
-        let ref = FIRDatabase.database().reference().child("user-reports")
-        let childRef = ref.childByAutoId()
+    func reportMessage(messageId: String)  {
+        let ref = FIRDatabase.database().reference().child("message-reports").child(messageId)
         let reportedUser = user!.id!
         let userWhoReported = FIRAuth.auth()!.currentUser!.uid
         let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
         let values: [String: AnyObject] = ["userReported" : reportedUser as AnyObject, "whoReported" : userWhoReported as AnyObject, "timestamp" : timestamp]
+        
+        ref.updateChildValues(values) { (error, ref) in
+            
+            if let error = error {
+                print(error)
+                AlertHelper.displayAlert(title: "Report Message", message: "Unable to report message. Plese try again later.", displayTo: self)
+                return
+            }
+            
+            AlertHelper.displayAlert(title: "Report Message", message: "Message reported. A moderator will look at this report and act accordingly.", displayTo: self)
+        }
+    }
+    
+    private func reportUser() {
+        
+        guard let userWhoReported = FIRAuth.auth()?.currentUser?.uid else { AlertHelper.displayAlert(title: "Report User", message: "Unable to report user. Plese try again later.", displayTo: self); return }
+        guard let reportedUser = user?.id else { AlertHelper.displayAlert(title: "Report User", message: "Unable to report user. Plese try again later.", displayTo: self); return }
+        
+        let ref = FIRDatabase.database().reference().child("user-reports").child(userWhoReported).child(reportedUser)
+        let timestamp = NSNumber(value: Int(Date().timeIntervalSince1970))
+        let values: [String: AnyObject] = ["userReported" : reportedUser as AnyObject, "whoReported" : userWhoReported as AnyObject, "timestamp" : timestamp]
 
-        childRef.updateChildValues(values) { (error, ref) in
+        ref.updateChildValues(values) { (error, ref) in
             
             if let error = error {
                 print(error)

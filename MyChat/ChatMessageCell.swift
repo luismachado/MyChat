@@ -50,6 +50,8 @@ class ChatMessageCell: UICollectionViewCell {
         }
     }
     
+    
+    
     func stopPlaying() {        
         if let existingPlayer = player {
             existingPlayer.pause()
@@ -106,6 +108,26 @@ class ChatMessageCell: UICollectionViewCell {
         return imageView
     }()
     
+    lazy var reportButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(named: "report")
+        button.tintColor = .darkGray
+        button.setImage(image, for: .normal)
+        button.addTarget(self, action: #selector(handleReport), for: .touchUpInside)
+        return button
+    }()
+    
+    func handleReport() {
+        if let chatLogController = chatLogController {
+            AlertHelper.displayAlertCancel(title: "Report", message: "Do you want to report this message?", displayTo: chatLogController, okCallback: { (action) in
+                if let messageId = self.message?.id {
+                    chatLogController.reportMessage(messageId: messageId)
+                }
+            })
+        }
+    }
+    
     func handleZoomTap(tapGesture: UITapGestureRecognizer) {
         
         if message?.videoUrl != nil {
@@ -127,12 +149,15 @@ class ChatMessageCell: UICollectionViewCell {
         addSubview(bubbleView)
         addSubview(textView)
         addSubview(profileImageView)
+        
         bubbleView.addSubview(messageImageView)
         
         messageImageView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor).isActive = true
         messageImageView.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
         messageImageView.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
         messageImageView.heightAnchor.constraint(equalTo: bubbleView.heightAnchor).isActive = true
+        
+        
         
         bubbleView.addSubview(activityIndicatorView)
         activityIndicatorView.centerXAnchor.constraint(equalTo: bubbleView.centerXAnchor).isActive = true
@@ -152,6 +177,8 @@ class ChatMessageCell: UICollectionViewCell {
         profileImageView.widthAnchor.constraint(equalToConstant: 32).isActive = true
         profileImageView.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
+        
+        
         bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8)
         bubbleViewRightAnchor?.isActive = true
         bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8)
@@ -164,6 +191,14 @@ class ChatMessageCell: UICollectionViewCell {
         textView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
         textView.rightAnchor.constraint(equalTo: bubbleView.rightAnchor).isActive = true
         textView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true
+        
+        addSubview(reportButton)
+        reportButton.centerYAnchor.constraint(equalTo: bubbleView.centerYAnchor).isActive = true
+        reportButton.centerXAnchor.constraint(equalTo: profileImageView.centerXAnchor).isActive = true
+        reportButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        reportButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

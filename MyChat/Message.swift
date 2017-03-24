@@ -11,6 +11,7 @@ import Firebase
 
 class Message: NSObject {
     
+    var id: String?
     var fromId: String?
     var text: String?
     var timestamp: NSNumber?
@@ -28,9 +29,10 @@ class Message: NSObject {
         return fromId  == FIRAuth.auth()?.currentUser?.uid ? toId : fromId
     }
     
-    init(dictionary: [String : AnyObject]) {
+    init(id: String?, dictionary: [String : AnyObject]) {
         super.init()
         
+        self.id = id
         fromId = dictionary["fromId"] as? String
         text = dictionary["text"] as? String
         timestamp = dictionary["timestamp"] as? NSNumber
