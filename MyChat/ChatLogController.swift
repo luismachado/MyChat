@@ -22,6 +22,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     }
     
     var messages = [Message]()
+    var messagesFetched = [Message]()
     weak var cellPlayingMultimedia: ChatMessageCell?
     
     func observeMessages() {
@@ -38,14 +39,29 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
                 guard let dictionary = snapshot.value as? [String : AnyObject] else { return }
                 let message = Message(id: snapshot.key, dictionary: dictionary)
                 
-                self.messages.append(message)
-                DispatchQueue.main.async(execute: {
-                    self.collectionView?.reloadData()
-                    
-                    let indexPath = IndexPath(item: self.messages.count-1, section: 0)
-                    self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
-                })
+                self.messagesFetched.append(message)
+
+                self.attemptReloadOfTable()
             })
+        })
+    }
+    
+    private func attemptReloadOfTable() {
+        self.timer?.invalidate()
+        self.timer = Timer.scheduledTimer(timeInterval: 0.3, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+    }
+    
+    var timer: Timer?
+    
+    func handleReloadTable() {
+        self.messages = [Message]()
+        self.messages = messagesFetched
+        
+         DispatchQueue.main.async(execute: {
+            self.collectionView?.reloadData()
+            
+            let indexPath = IndexPath(item: self.messages.count-1, section: 0)
+            self.collectionView?.scrollToItem(at: indexPath, at: .bottom, animated: true)
         })
     }
     
